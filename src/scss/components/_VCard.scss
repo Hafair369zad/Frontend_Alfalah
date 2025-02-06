@@ -1,4 +1,6 @@
 // Outline Card
+@use '../variables' as vars;
+
 .v-card--variant-outlined {
   border-color: rgba(var(--v-theme-borderLight), 0.36);
   .v-divider {
@@ -7,7 +9,7 @@
 }
 
 .v-card-text {
-  padding: $card-text-spacer;
+  padding: vars.$card-text-spacer;
 }
 
 .v-card {
@@ -16,5 +18,5 @@
 }
 
 .v-card-item {
-  padding: $card-item-spacer-xy;
+  padding: vars.$card-item-spacer-xy;
 }

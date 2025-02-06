@@ -1,20 +1,38 @@
 import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import vuetify from 'vite-plugin-vuetify';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-import vueJsx from '@vitejs/plugin-vue-jsx'
-import vueDevTools from 'vite-plugin-vue-devtools'
-
-// https://vite.dev/config/
+// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue(),
-    vueJsx(),
-    vueDevTools(),
+    vue({
+      template: {
+        compilerOptions: {
+          isCustomElement: (tag) => ['v-list-recognize-title'].includes(tag)
+        }
+      }
+    }),
+    vuetify({
+      autoImport: true
+    })
   ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
-    },
+    }
   },
-})
+  css: {
+    preprocessorOptions: {
+      scss: {
+      }
+    }
+  },
+  build: {
+    chunkSizeWarningLimit: 1024 * 1024 // Set the limit to 1 MB
+  },
+  optimizeDeps: {
+    exclude: ['vuetify'],
+    entries: ['./src/**/*.vue']
+  }
+});

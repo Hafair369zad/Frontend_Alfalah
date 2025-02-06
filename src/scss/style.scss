@@ -1,19 +1,21 @@
-@import './variables';
-@import 'vuetify/styles/main.sass';
-@import './override';
-@import './layout/container';
-@import './layout/sidebar';
-@import './layout/topbar';
+@use './variables' as *;
+@forward './variables'; 
+@use 'vuetify/styles/main.sass' as vuetify;
+@use './override' as *;
+@use './layout/container' as *;
+@use './layout/sidebar' as *;
+@use './layout/topbar' as *;
 
-@import './components/VButtons';
-@import './components/VCard';
-@import './components/VField';
-@import './components/VInput';
-@import './components/VNavigationDrawer';
-@import './components/VShadow';
-@import './components/VTextField';
-@import './components/VTabs';
+@use './components/VButtons' as *;
+@use './components/VCard' as *;
+@use './components/VField' as *;
+@use './components/VInput' as *;
+@use './components/VNavigationDrawer' as *;
+@use './components/VShadow' as *;
+@use './components/VTextField' as *;
+@use './components/VTabs' as *;
 
-@import './pages/dashboards';
+@use './pages/dashboards' as *;
 
-@import 'vue3-perfect-scrollbar/style.css';
+@use 'vue3-perfect-scrollbar/style.css' as *;
+
