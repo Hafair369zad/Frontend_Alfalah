@@ -25,8 +25,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
+       
       }
-    }
+    },
+
   },
   build: {
     chunkSizeWarningLimit: 1024 * 1024 // Set the limit to 1 MB

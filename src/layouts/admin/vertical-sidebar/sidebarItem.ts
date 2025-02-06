@@ -8,7 +8,8 @@ import {
   BugIcon,
   DashboardIcon,
   BrandChromeIcon,
-  HelpIcon
+  HelpIcon,
+  UserCircleIcon
 } from 'vue-tabler-icons';
 
 export interface menu {
@@ -28,6 +29,8 @@ export interface menu {
 }
 
 const sidebarItem: menu[] = [
+
+  // Dashboard
   { header: '' },
   {
     title: 'Dashboard',
@@ -35,10 +38,29 @@ const sidebarItem: menu[] = [
     to: '/admin/dashboard'
   },
   { divider: true },
-  { header: 'Pages' },
+
+  // Manajemen Student
+  { header: 'Student' },
+  {
+    title: 'SPP',
+    icon: KeyIcon,
+    to: '/auth',
+    children: [
+      {
+        title: 'Tambah Data',
+        icon: CircleIcon,
+        to: '/login1'
+      },
+      {
+        title: 'Register',
+        icon: CircleIcon,
+        to: '/register'
+      }
+    ]
+  },
   {
     title: 'Authentication',
-    icon: KeyIcon,
+    icon: UserCircleIcon,
     to: '/auth',
     children: [
       {
@@ -59,6 +81,8 @@ const sidebarItem: menu[] = [
     to: '/error'
   },
   { divider: true },
+
+  // Manajemen Employee
   { header: 'Utilities' },
   {
     title: 'Typography',

@@ -1,7 +1,7 @@
 <template>
   <div class="logo">
     <RouterLink to="/">
-     
+      
     </RouterLink>
   </div>
 </template>
