@@ -1,33 +1,173 @@
+// src/stores/auth.ts
 import { defineStore } from 'pinia';
-import { router } from '@/router';
-import { fetchWrapper } from '@/utils/helpers/fetch-wrapper';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import axiosInstance from '@/plugins/axios';
 
-const baseUrl = `${import.meta.env.VITE_API_URL}/users`;
 
-export const useAuthStore = defineStore({
-  id: 'auth',
-  state: () => ({
-    // initialize state from local storage to enable user to stay logged in
-    /* eslint-disable-next-line @typescript-eslint/ban-ts-comment */
-    // @ts-ignore
-    user: JSON.parse(localStorage.getItem('user')),
-    returnUrl: null
-  }),
-  actions: {
-    async login(username: string, password: string) {
-      const user = await fetchWrapper.post(`${baseUrl}/authenticate`, { username, password });
+export const useAuthStore = defineStore('auth', () => {
+  const router = useRouter();
+  const user = ref(null);
+  const token = ref<string | null>(localStorage.getItem('token'));
+  const role = ref<string | null>(localStorage.getItem('role'));
+  const loading = ref<boolean>(false);
+  const error = ref<string | null>(null);
 
-      // update pinia state
-      this.user = user;
-      // store user details and jwt in local storage to keep user logged in between page refreshes
-      localStorage.setItem('user', JSON.stringify(user));
-      // redirect to previous url or default to home page
-      router.push(this.returnUrl || '/admin/dashboard');
-    },
-    logout() {
-      this.user = null;
-      localStorage.removeItem('user');
-      router.push('/login');
+  // Computed properties
+  const isAuthenticated = computed(() => !!token.value);
+  const userRole = computed(() => role.value ?? "guest");
+
+  // Check if user has specific role
+  const hasRole = (requiredRole: string | string[]): boolean => {
+    if (!role.value) return false;
+    
+    if (Array.isArray(requiredRole)) {
+      return requiredRole.includes(role.value);
     }
-  }
+    return requiredRole === role.value;
+  };
+
+  // Login method
+  const login = async (email: string, password: string) => {
+    loading.value = true;
+    error.value = null;
+
+    try {
+      const response = await axiosInstance.post('/api/login', {
+        email,
+        password,
+      });
+
+      const { access_token, role: userRole } = response.data;
+      
+      // Set token and role
+      token.value = access_token;
+      role.value = userRole;
+      
+      // Store in localStorage
+      localStorage.setItem('token', access_token);
+      localStorage.setItem('role', userRole);
+      
+      // Set axios default header
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
+      
+      // Fetch user details
+      await fetchUser();
+
+      // Handle routing based on role
+      const roleRoutes: Record<string, string> = {
+        admin: '/admin/dashboard',
+        student: '/student/dashboard',
+        employee: '/employee/home',
+        visitor: '/home'
+      };
+
+      const targetRoute = roleRoutes[userRole] || '/home';
+      await router.push(targetRoute);
+
+      return userRole;
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Login failed';
+      error.value = errorMessage;
+      throw new Error(errorMessage);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  // Fetch user details
+  const fetchUser = async () => {
+    try {
+      const response = await axiosInstance.get('/api/me');
+      user.value = response.data.user;
+      role.value = response.data.role;
+      localStorage.setItem('role', response.data.role);
+    } catch (error) {
+      console.error('Failed to fetch user details:', error);
+      await logout();
+    }
+  };
+
+  // Initialize auth state
+  const initAuth = async () => {
+    if (token.value) {
+      loading.value = true;
+      try {
+        axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token.value}`;
+        await fetchUser();
+      } catch (error) {
+        console.error('Failed to initialize auth:', error);
+        await logout();
+      } finally {
+        loading.value = false;
+      }
+    }
+  };
+
+  // Logout method
+  const logout = async () => {
+    loading.value = true;
+    try {
+      if (token.value) {
+        // Call logout endpoint
+        await axiosInstance.post('/api/logout');
+      }
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      // Clear all auth data
+      user.value = null;
+      token.value = null;
+      role.value = null;
+      error.value = null;
+      
+      // Remove from localStorage
+      localStorage.removeItem('token');
+      localStorage.removeItem('role');
+      
+      // Clear axios header
+      delete axiosInstance.defaults.headers.common['Authorization'];
+      
+      // Reset loading state
+      loading.value = false;
+      
+      // Redirect to login
+      await router.push('/login');
+    }
+  };
+
+  // Check auth status
+  const checkAuth = async () => {
+    if (!token.value) {
+      return false;
+    }
+
+    try {
+      await fetchUser();
+      return true;
+    } catch (error) {
+      return false;
+    }
+  };
+
+  return {
+    // State
+    user,
+    token,
+    role,
+    loading,
+    error,
+
+    // Computed
+    isAuthenticated,
+    userRole,
+
+    // Methods
+    login,
+    logout,
+    fetchUser,
+    initAuth,
+    checkAuth,
+    hasRole
+  };
 });

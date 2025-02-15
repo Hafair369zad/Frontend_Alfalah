@@ -1,22 +1,32 @@
-const AdminRoutes = {
+import type { RouteRecordRaw } from 'vue-router';
+
+const AdminRoutes: RouteRecordRaw = {
   path: '/admin',
+  component: () => import('@/layouts/admin/AdminLayout.vue'),
   meta: {
-    requiresAuth: true
+    requiresAuth: true,
+    role: ['admin']
   },
   redirect: '/admin/dashboard',
-  component: () => import('@/layouts/admin/AdminLayout.vue'),
   children: [
     {
       name: 'Dashboard Admin',
-      path: '/admin/dashboard',
-      component: () => import('@/views/admin/adminDashboard.vue')
+      path: 'dashboard',
+      component: () => import('@/views/admin/adminDashboard.vue'),
+      meta: { 
+        requiresAuth: true, 
+        role: ['admin'] 
+      }
     },
     {
       name: 'Manajemen Student',
-      path: '/admin/student',
-      component: () => import('@/views/admin/students/indexPages.vue')
-    },
-
+      path: 'student',
+      component: () => import('@/views/admin/students/indexPages.vue'),
+      meta: { 
+        requiresAuth: true, 
+        role: ['admin'] 
+      }
+    }
   ]
 };
 

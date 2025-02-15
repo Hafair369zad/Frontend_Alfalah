@@ -41,46 +41,87 @@ const sidebarItem: menu[] = [
 
   // Manajemen Student
   { header: 'Student' },
+
+  // Manajemen Student/Data Student
+  {
+    title: 'Data Santri',
+    icon: KeyIcon,
+    to: '/santri',
+    children: [
+      {
+        title: 'Monitoring',
+        icon: CircleIcon,
+        to: '/admin/student'
+      },
+      {
+        title: 'Transaksi',
+        icon: CircleIcon,
+        to: '/admin/student/spp/transaksi'
+      },
+      {
+        title: 'Pengaturan',
+        icon: CircleIcon,
+        to: '/admin/student/spp/set'
+      }
+    ]
+  },
+
+  // Manajemen Student/SPP
   {
     title: 'SPP',
     icon: KeyIcon,
-    to: '/auth',
+    to: '/spp',
     children: [
       {
-        title: 'Tambah Data',
+        title: 'Monitoring',
         icon: CircleIcon,
-        to: '/login1'
+        to: '/admin/student'
       },
       {
-        title: 'Register',
+        title: 'Transaksi',
         icon: CircleIcon,
-        to: '/register'
+        to: '/admin/student/spp/transaksi'
+      },
+      {
+        title: 'Pengaturan',
+        icon: CircleIcon,
+        to: '/admin/student/spp/set'
       }
     ]
   },
+
+  // Manajemen Student/Absen
   {
-    title: 'Authentication',
+    title: 'Kehadiran',
     icon: UserCircleIcon,
-    to: '/auth',
+    to: '/absen',
     children: [
       {
-        title: 'Login',
+        title: 'Monitoring',
         icon: CircleIcon,
-        to: '/login1'
+        to: '/admin/student/absen/monitoring'
       },
       {
-        title: 'Register',
+        title: 'Laporan',
         icon: CircleIcon,
-        to: '/register'
+        to: '/admin/student/absen/laporan'
+      },
+      {
+        title: 'Pengaturan',
+        icon: CircleIcon,
+        to: '/admin/student/absen/set'
       }
     ]
   },
+
   {
     title: 'Error 404',
     icon: BugIcon,
     to: '/error'
   },
   { divider: true },
+
+
 
   // Manajemen Employee
   { header: 'Utilities' },

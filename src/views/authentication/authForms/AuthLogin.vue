@@ -1,15 +1,12 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref } from 'vue';
-import Google from '@/assets/images/auth/social-google.svg';
-import { useAuthStore } from '@/stores/auth';
 import { Form } from 'vee-validate';
 
 const checkbox = ref(false);
 const valid = ref(false);
 const show1 = ref(false);
-//const logform = ref();
-const password = ref('admin123');
-const username = ref('info@codedthemes.com');
+const logform = ref();
+
 const passwordRules = ref([
   (v: string) => !!v || 'Password is required',
   (v: string) => (v && v.length <= 10) || 'Password must be less than 10 characters'
@@ -24,10 +21,6 @@ function validate(values: any, { setErrors }: any) {
 </script>
 
 <template>
-  <v-btn block color="primary" variant="outlined" class="text-lightText googleBtn">
-    <img :src="Google" alt="google" />
-    <span class="ml-2">Sign in with Google</span></v-btn
-  >
   <v-row>
     <v-col class="d-flex align-center">
       <v-divider class="custom-devider" />
@@ -119,5 +112,50 @@ function validate(values: any, { setErrors }: any) {
   .v-text-field .v-field--active input {
     font-weight: 500;
   }
+}
+</style> -->
+
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
+
+const auth = useAuthStore();
+const email = ref('');
+const password = ref('');
+const isSubmitting = ref(false);
+
+const login = async () => {
+  if (!email.value || !password.value) {
+    auth.error = 'Email dan password harus diisi!';
+    return;
+  }
+
+  isSubmitting.value = true;
+
+  try {
+    await auth.login(email.value, password.value);
+  } catch (error) {
+    // Error handling is managed by the store
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+</script>
+
+<template>
+  <form @submit.prevent="login">
+    <input v-model="email" type="email" placeholder="Email" required />
+    <input v-model="password" type="password" placeholder="Password" required />
+    <button type="submit" :disabled="isSubmitting || auth.loading">
+      {{ auth.loading ? 'Loading...' : 'Login' }}
+    </button>
+    <p v-if="auth.error" class="error">{{ auth.error }}</p>
+  </form>
+</template>
+
+<style scoped>
+.error {
+  color: red;
+  font-size: 14px;
 }
 </style>

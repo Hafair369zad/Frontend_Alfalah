@@ -6,29 +6,28 @@ const PublicRoutes = {
   },
   children: [
     {
-      name : 'Landing Page',
-      path: '/',
+      name: 'Landing Page',
+      path: '',
       component: () => import('@/views/indexPage.vue')
     },
     {
-      name: 'Authentication',
-      path: '/login',
-      component: () => import('@/views/authentication/LoginPage.vue')
-    },
-    {
       name: 'Login',
-      path: '/login1',
+      path: 'login', // Perbaikan: path relatif
       component: () => import('@/views/authentication/auth/LoginPage.vue')
     },
     {
       name: 'Register',
-      path: '/register',
+      path: 'register', // Perbaikan: path relatif
       component: () => import('@/views/authentication/auth/RegisterPage.vue')
     },
     {
       name: 'Error 404',
-      path: '/error',
+      path: 'error',
       component: () => import('@/views/pages/maintenance/error/Error404Page.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/error' // Perbaikan: Redirect otomatis ke halaman 404
     }
   ]
 };

@@ -36,5 +36,20 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['vuetify'],
     entries: ['./src/**/*.vue']
+  },
+
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://127.0.0.1:8000', // Backend Laravel
+        changeOrigin: true,
+        secure: false
+      },
+      '/sanctum': {
+        target: 'http://127.0.0.1:8000',
+        changeOrigin: true,
+        secure: false
+      }
+    }
   }
 });
