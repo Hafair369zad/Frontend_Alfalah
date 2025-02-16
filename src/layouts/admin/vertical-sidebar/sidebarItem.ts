@@ -53,66 +53,66 @@ const sidebarItem: menu[] = [
         icon: CircleIcon,
         to: '/admin/student'
       },
-      {
-        title: 'Transaksi',
-        icon: CircleIcon,
-        to: '/admin/student/spp/transaksi'
-      },
-      {
-        title: 'Pengaturan',
-        icon: CircleIcon,
-        to: '/admin/student/spp/set'
-      }
+  //     {
+  //       title: 'Transaksi',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/spp/transaksi'
+  //     },
+  //     {
+  //       title: 'Pengaturan',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/spp/set'
+  //     }
     ]
   },
 
   // Manajemen Student/SPP
-  {
-    title: 'SPP',
-    icon: KeyIcon,
-    to: '/spp',
-    children: [
-      {
-        title: 'Monitoring',
-        icon: CircleIcon,
-        to: '/admin/student'
-      },
-      {
-        title: 'Transaksi',
-        icon: CircleIcon,
-        to: '/admin/student/spp/transaksi'
-      },
-      {
-        title: 'Pengaturan',
-        icon: CircleIcon,
-        to: '/admin/student/spp/set'
-      }
-    ]
-  },
+  // {
+  //   title: 'SPP',
+  //   icon: KeyIcon,
+  //   to: '/spp',
+  //   children: [
+  //     {
+  //       title: 'Monitoring',
+  //       icon: CircleIcon,
+  //       to: '/admin/student'
+  //     },
+  //     {
+  //       title: 'Transaksi',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/spp/transaksi'
+  //     },
+  //     {
+  //       title: 'Pengaturan',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/spp/set'
+  //     }
+  //   ]
+  // },
 
   // Manajemen Student/Absen
-  {
-    title: 'Kehadiran',
-    icon: UserCircleIcon,
-    to: '/absen',
-    children: [
-      {
-        title: 'Monitoring',
-        icon: CircleIcon,
-        to: '/admin/student/absen/monitoring'
-      },
-      {
-        title: 'Laporan',
-        icon: CircleIcon,
-        to: '/admin/student/absen/laporan'
-      },
-      {
-        title: 'Pengaturan',
-        icon: CircleIcon,
-        to: '/admin/student/absen/set'
-      }
-    ]
-  },
+  // {
+  //   title: 'Kehadiran',
+  //   icon: UserCircleIcon,
+  //   to: '/absen',
+  //   children: [
+  //     {
+  //       title: 'Monitoring',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/absen/monitoring'
+  //     },
+  //     {
+  //       title: 'Laporan',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/absen/laporan'
+  //     },
+  //     {
+  //       title: 'Pengaturan',
+  //       icon: CircleIcon,
+  //       to: '/admin/student/absen/set'
+  //     }
+  //   ]
+  // },
 
   {
     title: 'Error 404',

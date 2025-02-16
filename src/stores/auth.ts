@@ -5,20 +5,31 @@ import { useRouter } from 'vue-router';
 import axiosInstance from '@/plugins/axios';
 
 
+// Define valid role types
+type UserRole = 'admin' | 'student' | 'employee' | 'visitor' | 'guest';
+
 export const useAuthStore = defineStore('auth', () => {
   const router = useRouter();
   const user = ref(null);
   const token = ref<string | null>(localStorage.getItem('token'));
-  const role = ref<string | null>(localStorage.getItem('role'));
+  const role = ref<UserRole | null>(localStorage.getItem('role') as UserRole | null);
   const loading = ref<boolean>(false);
   const error = ref<string | null>(null);
 
   // Computed properties
   const isAuthenticated = computed(() => !!token.value);
-  const userRole = computed(() => role.value ?? "guest");
-
-  // Check if user has specific role
+  const userRole = computed(() => {
+    const currentRole = role.value ?? "guest";
+    console.log('Current role:', currentRole);
+    return currentRole;
+  });
+  
   const hasRole = (requiredRole: string | string[]): boolean => {
+    console.log('Checking role:', {
+      required: requiredRole,
+      current: role.value,
+    });
+    
     if (!role.value) return false;
     
     if (Array.isArray(requiredRole)) {
@@ -81,13 +92,16 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await axiosInstance.get('/api/me');
       user.value = response.data.user;
       role.value = response.data.role;
+  
+      // Pastikan role tersimpan dengan benar di localStorage
       localStorage.setItem('role', response.data.role);
+      console.log('🔄 Updated user role:', response.data.role);
     } catch (error) {
-      console.error('Failed to fetch user details:', error);
+      console.error('❌ Failed to fetch user details:', error);
       await logout();
     }
   };
-
+  
   // Initialize auth state
   const initAuth = async () => {
     if (token.value) {

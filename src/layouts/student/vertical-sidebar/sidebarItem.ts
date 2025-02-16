@@ -32,7 +32,7 @@ const sidebarItem: menu[] = [
   {
     title: 'Dashboard',
     icon: DashboardIcon,
-    to: '/admin/dashboard'
+    to: '/student/dashboard'
   },
   { divider: true },
   { header: 'Pages' },

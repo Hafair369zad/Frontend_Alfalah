@@ -1,3 +1,4 @@
+// src/router/index.ts
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteLocationNormalized } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
@@ -5,76 +6,141 @@ import AdminRoutes from './AdminRoutes';
 import StudentRoutes from './StudentRoutes';
 import EmployeeRoutes from './EmployeeRoutes';
 import VisitorRoutes from './VisitorRoutes';
-import PublicRoutes from './PublicRoutes';;
+import PublicRoutes from './PublicRoutes';
+
+// Define role redirects at the top level
+const roleRedirects: Record<string, string> = {
+  admin: '/admin/dashboard',
+  student: '/student/dashboard',
+  employee: '/employee/home',
+  visitor: '/home'
+};
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/:pathMatch(.*)*',
-      component: () => import('@/views/pages/maintenance/error/Error404Page.vue')
-    },
     AdminRoutes,
     StudentRoutes,
     EmployeeRoutes,
     VisitorRoutes,
-    PublicRoutes
+    PublicRoutes,
+    {
+      path: '/:pathMatch(.*)*',
+      component: () => import('@/views/pages/maintenance/error/Error404Page.vue')
+    }
   ]
 });
 
-router.beforeEach(async (to: RouteLocationNormalized, from: RouteLocationNormalized, next) => {
+
+// Debug log setelah router dibuat
+console.log('All Registered Routes:', router.getRoutes().map(route => ({
+  path: route.path,
+  name: route.name,
+  meta: route.meta
+})));
+
+
+
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore();
-  
+ 
+  // Initialize auth if needed
   if (!authStore.user && authStore.token) {
     await authStore.initAuth();
   }
-
-  const requiresAuth = to.meta.requiresAuth;
-  const requiredRole = to.meta.role;
-
-  // Debug logging
-  console.log('Current route:', to.path);
-  console.log('Required auth:', requiresAuth);
-  console.log('Required role:', requiredRole);
-  console.log('User role:', authStore.userRole);
-  console.log('Is authenticated:', authStore.isAuthenticated);
-
-  // If route requires auth and user is not authenticated
-  if (requiresAuth && !authStore.isAuthenticated) {
-    console.log('Not authenticated, redirecting to login');
-    next('/login');
-    return;
-  }
-
-  // Check role access
-  if (requiredRole) {
-    const hasRequiredRole = Array.isArray(requiredRole)
-      ? requiredRole.includes(authStore.userRole)
-      : requiredRole === authStore.userRole;
-
-    if (!hasRequiredRole) {
-      console.log('Unauthorized role access');
-      console.log('Required role:', requiredRole);
-      console.log('User role:', authStore.userRole);
-      // Redirect to appropriate page based on user's role
-      switch (authStore.userRole) {
-        case 'student':
-          next('/student/dashboard');
-          break;
-        case 'admin':
-          next('/admin/dashboard');
-          break;
-        case 'employee':
-          next('/employee/home');
-          break;
-        default:
-          next('/unauthorized');
-      }
-      return;
+ 
+  // Periksa apakah rute saat ini adalah rute admin atau student
+  const isAdminRoute = to.path.startsWith('/admin');
+  const isStudentRoute = to.path.startsWith('/student');
+ 
+  // Debug: Log detail rute dan role
+  console.log('Route Details:', {
+    path: to.path,
+    isAdminRoute,
+    isStudentRoute,
+    userRole: authStore.userRole,
+    matchedRoutes: to.matched.map(route => ({
+      path: route.path,
+      meta: route.meta
+    }))
+  });
+ 
+  // Collect roles dari matched routes dengan cara yang lebih ketat
+  const matchedRoles = to.matched.reduce((roles, route) => {
+    const routeRole = route.meta?.role;
+    if (Array.isArray(routeRole)) {
+      roles.push(...routeRole);
+    } else if (routeRole) {
+      roles.push(routeRole);
     }
+    return roles;
+  }, [] as string[]);
+ 
+  // Tambahkan role berdasarkan path jika tidak ada matched roles
+  if (isAdminRoute && !matchedRoles.includes('admin')) {
+    matchedRoles.push('admin');
   }
-
+  if (isStudentRoute && !matchedRoles.includes('student')) {
+    matchedRoles.push('student');
+  }
+ 
+  const requiresAuth = to.matched.some(record => record.meta?.requiresAuth);
+ 
+  // Enhanced debug logging
+  console.log('Auth Check:', {
+    path: to.path,
+    matchedRoles,
+    userRole: authStore.userRole,
+    isAuthenticated: authStore.isAuthenticated,
+    requiresAuth,
+    matched: to.matched.length
+  });
+ 
+  // Check authentication
+  if (requiresAuth && !authStore.isAuthenticated) {
+    console.log('⛔ Authentication required, redirecting to login');
+    return next('/login');
+  }
+ 
+  // Strict role checking
+  const hasAccess = matchedRoles.length === 0 || matchedRoles.includes(authStore.userRole);
+ 
+  // Additional path-based role protection
+  if (isAdminRoute && authStore.userRole !== 'admin') {
+    console.log('🚫 Non-admin trying to access admin route');
+    return next(roleRedirects[authStore.userRole] || '/unauthorized');
+  }
+ 
+  if (isStudentRoute && authStore.userRole !== 'student') {
+    console.log('🚫 Non-student trying to access student route');
+    return next(roleRedirects[authStore.userRole] || '/unauthorized');
+  }
+ 
+  // Final role check
+  if (!hasAccess) {
+    console.log('🚫 Role authorization failed', {
+      required: matchedRoles,
+      current: authStore.userRole
+    });
+    const fallbackRoute = roleRedirects[authStore.userRole] || '/unauthorized';
+    console.log(`↩️ Redirecting to ${fallbackRoute}`);
+    return next(fallbackRoute);
+  }
+ 
+  // Log successful navigation
+  console.log('✅ Access granted:', {
+    path: to.path,
+    userRole: authStore.userRole
+  });
+ 
   next();
-});
+ });
+ 
+ // Debug: Log all registered routes at startup
+ console.log('Registered Routes:', router.getRoutes().map(route => ({
+  path: route.path,
+  meta: route.meta,
+  name: route.name
+ })));
 
 export default router;
