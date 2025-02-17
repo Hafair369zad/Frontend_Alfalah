@@ -31,12 +31,12 @@ export const router = createRouter({
   ]
 });
 
-// Debug log setelah router dibuat
-console.log('All Registered Routes:', router.getRoutes().map(route => ({
-  path: route.path,
-  name: route.name,
-  meta: route.meta
-})));
+// // Debug log setelah router dibuat
+// console.log('All Registered Routes:', router.getRoutes().map(route => ({
+//   path: route.path,
+//   name: route.name,
+//   meta: route.meta
+// })));
 
 
 
@@ -155,11 +155,11 @@ router.beforeEach(async (to, from, next) => {
   next();
   });
 
-  // Debug: Log all registered routes at startup
-  console.log('Registered Routes:', router.getRoutes().map(route => ({
-    path: route.path,
-    meta: route.meta,
-    name: route.name
-  })));
+  // // Debug: Log all registered routes at startup
+  // console.log('Registered Routes:', router.getRoutes().map(route => ({
+  //   path: route.path,
+  //   meta: route.meta,
+  //   name: route.name
+  // })));
 
 export default router;

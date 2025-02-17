@@ -11,11 +11,11 @@ const VisitorRoutes = {
         path: '/admin/dashboard',
         component: () => import('@/views/admin/adminDashboard.vue')
       },
-      {
-        name: 'Manajemen Student',
-        path: '/admin/student',
-        component: () => import('@/views/admin/students/indexPages.vue')
-      },
+      // {
+      //   name: 'Manajemen Student',
+      //   path: '/admin/student',
+      //   component: () => import('@/views/admin/students/indexPages.vue')
+      // },
   
     ]
   };

@@ -12,7 +12,7 @@ const AdminRoutes: RouteRecordRaw = {
     // dashboard utama
     {
       path: 'dashboard',
-      name: 'Dashboard Admin',
+      name: 'DashboardAdmin',
       component: () => import('@/views/admin/adminDashboard.vue'),
       meta: { 
         requiresAuth: true,
@@ -23,8 +23,8 @@ const AdminRoutes: RouteRecordRaw = {
     // ================== Manajemen Pengguna ==================
     {
       path: 'user/employee',
-      name: 'Data Employee',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'DataEmployee',
+      component: () => import('@/views/admin/users/employeePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -33,8 +33,8 @@ const AdminRoutes: RouteRecordRaw = {
 
     {
       path: 'user/student',
-      name: 'Data Student',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'DataStudent',
+      component: () => import('@/views/admin/users/studentPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -43,8 +43,8 @@ const AdminRoutes: RouteRecordRaw = {
 
     {
       path: 'user/visitor',
-      name: 'Data Visitor',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'DataVisitor',
+      component: () => import('@/views/admin/users/visitorPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -53,31 +53,48 @@ const AdminRoutes: RouteRecordRaw = {
 
 
     // ================== Manajemen Santri  ==================
-    // SPP
+
+    // Report Kesluruhan
     {
-      path: 'student/spp/billing',
-      name: 'Manajemen Tagihan',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'student/report',
+      name: 'LaporanAkdemik',
+      component: () => import('@/views/admin/students/reportPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
+    // Sub Menu SPP
+
+    // Daftar tagihan
+    {
+      path: 'student/spp/billing', 
+      name: 'TagihanSPP',
+      component: () => import('@/views/admin/students/spps/billingPages.vue'),
+      meta: { 
+        requiresAuth: true,
+        role: ['admin']
+      }
+    },
+
+
+    // Riwayat Pembayaran
     {
       path: 'student/spp/payment',
-      name: 'Manajemen Pembayaran',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PembayaranSPP',
+      component: () => import('@/views/admin/students/spps/paymentPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
+    // menampilkan dashboard laporan pemasukan keuangan
     {
       path: 'student/spp/report',
-      name: 'Manajemen Laporan Keuangan',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'LaporanKeuanganSPP',
+      component: () => import('@/views/admin/students/spps/reportPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -86,19 +103,19 @@ const AdminRoutes: RouteRecordRaw = {
 
     {
       path: 'student/spp/set',
-      name: 'Pengaturan SPP',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PengaturanSPP',
+      component: () => import('@/views/admin/students/spps/setPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
-    // Kelas & Akademik
+    // Sub Menu Kelas & Akademik
     {
       path: 'student/class',
-      name: 'Manajemen Kelas',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'KelasProgram',
+      component: () => import('@/views/admin/students/classPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -106,8 +123,8 @@ const AdminRoutes: RouteRecordRaw = {
     },
     {
       path: 'student/lesson',
-      name: 'Manajemen Pelajaran',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'Pelajaran',
+      component: () => import('@/views/admin/students/lessonPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -115,94 +132,74 @@ const AdminRoutes: RouteRecordRaw = {
     },
     {
       path: 'student/presence',
-      name: 'Manajemen Presensi',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PresensiSantri',
+      component: () => import('@/views/admin/students/presencePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
+    
+    // ================== Manajemen Employee  Tpq ==================
+
+    // presence
     {
-      path: 'student/report',
-      name: 'Manajemen Laporan Akdemik',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'employee/presence',
+      name: 'PresensiEmployee',
+      component: () => import('@/views/admin/employees/presencePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
-
-    // ================== Employee ==================
+    // Positions
     {
-      path: 'employee/jobs',
-      name: 'Manajemen Jabatan dan Wali Kelas',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'employee/position',
+      name: 'JabatanEmployee',
+      component: () => import('@/views/admin/employees/positionPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
-    // Payroll
-    {
-      path: 'employee/sallary/list',
-      name: 'Daftar Gaji',
-      component: () => import('@/views/admin/students/indexPages.vue'),
-      meta: { 
-        requiresAuth: true,
-        role: ['admin']
-      }
-    },
-
+    // Sub Menu Sallary 
     {
       path: 'employee/sallary/transaction',
-      name: 'Riwayat Transaksi Gaji',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'TransaksiPenggajian',
+      component: () => import('@/views/admin/employees/sallarys/transactionPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
-
     {
       path: 'employee/sallary/report',
-      name: 'Laporan Penggajian',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'LaporanPenggajian',
+      component: () => import('@/views/admin/employees/sallarys/reportPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
-
     {
       path: 'employee/sallary/set',
-      name: 'Pengaturan Penggajian',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PengaturanPenggajian',
+      component: () => import('@/views/admin/employees/sallarys/setPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
-
 
     // ====================== Manajemen Content ======================
 
     // article
     {
-      path: '/article',
-      name: 'Data Article',
-      component: () => import('@/views/admin/students/indexPages.vue'),
-      meta: { 
-        requiresAuth: true,
-        role: ['admin']
-      }
-    },
-
-    {
-      path: '/article/type',
-      name: 'Data Tipe Article',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'user/article',
+      name: 'DataArticle',
+      component: () => import('@/views/admin/users/articlePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -211,9 +208,9 @@ const AdminRoutes: RouteRecordRaw = {
 
     // announcement
     {
-      path: '/announcement',
-      name: 'Data Pengumuman',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'user/announcement',
+      name: 'DataPengumuman',
+      component: () => import('@/views/admin/users/announcementPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -222,9 +219,9 @@ const AdminRoutes: RouteRecordRaw = {
 
     // Event
     {
-      path: '/event',
-      name: 'Data Acara',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'user/event',
+      name: 'DataAcara',
+      component: () => import('@/views/admin/users/eventPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -233,23 +230,22 @@ const AdminRoutes: RouteRecordRaw = {
 
     // Manajemen Informasi lainnya
     {
-      path: '/inforamtion',
-      name: 'Manajemen Data Informasi',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      path: 'user/information',
+      name: 'DataInformasi',
+      component: () => import('@/views/admin/users/informationPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
 
-
     // ====================== Manajemen Anggaran ======================
-    // ===== Masjid =====
+    // Sub Menu ===== Masjid =====
     // Pemasukan
     {
       path: 'mosque/income',
-      name: 'Manajemen Pemasukan Masjid',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PemasukanMasjid',
+      component: () => import('@/views/admin/mosques/incomePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -258,18 +254,18 @@ const AdminRoutes: RouteRecordRaw = {
     // Pengeluaran 
     {
       path: 'mosque/expense',
-      name: 'Manajemen Pengeluaran Masjid',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PengeluaranMasjid',
+      component: () => import('@/views/admin/mosques/expensePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
-    // Rekap Keuangan
+    // Rekap Saldo Keuangan
     {
       path: 'mosque/report',
-      name: 'Manajemen Rekap Keuangan Masjid',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'RekapKeuanganMasjid',
+      component: () => import('@/views/admin/mosques/reportPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -280,8 +276,8 @@ const AdminRoutes: RouteRecordRaw = {
     // Pemasukan
     {
       path: 'tpq/income',
-      name: 'Manajemen Pemasukan TPQ',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PemasukanTPQ',
+      component: () => import('@/views/admin/tpqs/incomePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
@@ -290,23 +286,35 @@ const AdminRoutes: RouteRecordRaw = {
     // Pengeluaran 
     {
       path: 'tpq/expense',
-      name: 'Manajemen Pengeluaran TPQ',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'PengeluaranTPQ',
+      component: () => import('@/views/admin/tpqs/expensePages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
-    // Rekap Keuangan
+    // Rekap Saldo Keuangan
     {
       path: 'tpq/report',
-      name: 'Manajemen Rekap Keuangan TPQ',
-      component: () => import('@/views/admin/students/indexPages.vue'),
+      name: 'RekapKeuanganTPQ',
+      component: () => import('@/views/admin/tpqs/reportPages.vue'),
       meta: { 
         requiresAuth: true,
         role: ['admin']
       }
     },
+
+    // Pengaturan halaman Admin
+    {
+      path: 'settings',
+      name: 'Settings',
+      component: () => import('@/views/admin/settingPages.vue'),
+      meta: { 
+        requiresAuth: true,
+        role: ['admin']
+      }
+    },
+
   ]
 };
 
