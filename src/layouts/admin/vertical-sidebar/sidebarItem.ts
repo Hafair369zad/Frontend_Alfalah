@@ -53,16 +53,16 @@ const sidebarItem: menu[] = [
         icon: CircleIcon,
         to: '/admin/student'
       },
-  //     {
-  //       title: 'Transaksi',
-  //       icon: CircleIcon,
-  //       to: '/admin/student/spp/transaksi'
-  //     },
-  //     {
-  //       title: 'Pengaturan',
-  //       icon: CircleIcon,
-  //       to: '/admin/student/spp/set'
-  //     }
+      {
+        title: 'Transaksi',
+        icon: CircleIcon,
+        to: '/admin/student/spp/transaksi'
+      },
+      {
+        title: 'Pengaturan',
+        icon: CircleIcon,
+        to: '/admin/student/spp/set'
+      }
     ]
   },
 

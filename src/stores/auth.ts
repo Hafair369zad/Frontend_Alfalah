@@ -62,7 +62,6 @@ export const useAuthStore = defineStore('auth', () => {
       // Set axios default header
       axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
       
-      // Fetch user details
       await fetchUser();
 
       // Handle routing based on role
@@ -146,7 +145,7 @@ export const useAuthStore = defineStore('auth', () => {
       loading.value = false;
       
       // Redirect to login
-      await router.push('/login');
+      await router.push('/');
     }
   };
 
